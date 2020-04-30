@@ -36,6 +36,19 @@ stages:
   jobs:
   - deployment: 
     environment: Check
+    strategy:
+     runOnce:
+      deploy:
+         steps:
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'azuredevopsar'
+              appType: 'webApp'
+              WebAppName: 'ReactAppDev'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/build'
+       
+
   -  job: DeployPackageinQA
       
      steps:
