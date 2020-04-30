@@ -19,7 +19,7 @@ stages:
         artifact: 'build'
         publishLocation: 'pipeline'
       
-  - deployment: DeployPackageinDev
+  - deployment: DeployPackage in Dev
     environment: Check
   -  job: DeployPackageinQA
      steps:
@@ -34,7 +34,7 @@ stages:
 - stage: QA
 
   jobs:
-  - deployment: 
+  - deployment: Deployement in QA
     environment: Check
     strategy:
      runOnce:
@@ -52,15 +52,4 @@ stages:
               appType: 'webApp'
               WebAppName: 'ReactAppDev'
               packageForLinux: '$(Pipeline.Workspace)/build'
-       
-
-  -  job: DeployPackageinQA
-      
-     steps:
-      - task: AzureRmWebAppDeployment@4
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'azuredevopsar'
-          appType: 'webApp'
-          WebAppName: 'ReactAppDev'
-          packageForLinux: '$(Pipeline.Workspace)/build'
+     
