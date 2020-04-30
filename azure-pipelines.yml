@@ -21,15 +21,17 @@ stages:
       
   - deployment: DeployPackageDev
     environment: Check
-  -  job: DeployPackageinQA
-     steps:
-        - task: AzureRmWebAppDeployment@4
-          inputs:
-           ConnectionType: 'AzureRM'
-           azureSubscription: 'azuredevopsar'
-           appType: 'webApp'
-           WebAppName: 'ReactAppDev'
-           packageForLinux: '$(Pipeline.Workspace)/build'
+    strategy:
+     runOnce:
+      deploy:
+        steps:
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'azuredevopsar'
+              appType: 'webApp'
+              WebAppName: 'ReactAppDev'
+              packageForLinux: '$(Pipeline.Workspace)/build'
 
 - stage: QA
 
