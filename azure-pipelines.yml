@@ -19,7 +19,7 @@ stages:
         artifact: 'build'
         publishLocation: 'pipeline'
       
-  - deployment: DeployPackage in Dev
+  - deployment: DeployPackageDev
     environment: Check
   -  job: DeployPackageinQA
      steps:
@@ -34,7 +34,7 @@ stages:
 - stage: QA
 
   jobs:
-  - deployment: Deployement in QA
+  - deployment: DeployementQA
     environment: Check
     strategy:
      runOnce:
