@@ -19,19 +19,25 @@ stages:
         ArtifactName: 'build'
         publishLocation: 'Container'
       
-  - job: DeployPackageinDev
-    steps:
-      - task: AzureRmWebAppDeployment@4
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'azuredevopsar'
-          appType: 'webApp'
-          WebAppName: 'ReactAppDev'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/build'
+  - deployment: DeployPackageinDev
+    environment: Check
+  -  job: DeployPackageinQA
+     steps:
+        - task: AzureRmWebAppDeployment@4
+          inputs:
+           ConnectionType: 'AzureRM'
+           azureSubscription: 'azuredevopsar'
+           appType: 'webApp'
+           WebAppName: 'ReactAppDev'
+           packageForLinux: '$(System.DefaultWorkingDirectory)/build'
 
 - stage: QA
+
   jobs:
+  - deployment: 
+    environment: Check
   -  job: DeployPackageinQA
+      
      steps:
       - task: AzureRmWebAppDeployment@4
         inputs:
