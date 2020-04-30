@@ -1,57 +1,37 @@
-stages:
-- stage: Build
-  jobs:
-  - job: BuildPackage
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '10.x'
-      displayName: 'Install Node.js'
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-    - script: |
-        npm install
-        npm run build
-      displayName: 'npm install and build'
 
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(Pipeline.Workspace)'
-        artifact: 'build'
-        publishLocation: 'pipeline'
-      
-  - deployment: DeployPackageDev
-    environment: Check
-    strategy:
-     runOnce:
-      deploy:
-        steps:
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'azuredevopsar'
-              appType: 'webApp'
-              WebAppName: 'ReactAppDev'
-              packageForLinux: '$(Pipeline.Workspace)/build'
 
-- stage: QA
+trigger:
+- master
 
-  jobs:
-  - deployment: DeployementQA
-    environment: Check
-    strategy:
-     runOnce:
-      deploy:
-         steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
-             buildType: 'current'
-             targetPath: '$(Pipeline.Workspace)'
+pool:
+  vmImage: 'ubuntu-latest'
 
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'azuredevopsar'
-              appType: 'webApp'
-              WebAppName: 'ReactAppDev'
-              packageForLinux: '$(Pipeline.Workspace)/build'
-     
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)'
+    ArtifactName: 'build'
+    publishLocation: 'Container'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'azuredevopsar'
+    appType: 'webApp'
+    WebAppName: 'ReactAppDev'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/build'
