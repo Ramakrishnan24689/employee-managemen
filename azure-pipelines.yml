@@ -13,11 +13,11 @@ stages:
         npm run build
       displayName: 'npm install and build'
 
-    - task: PublishBuildArtifacts@1
+    - task: PublishPipelineArtifact@1
       inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)'
-        ArtifactName: 'build'
-        publishLocation: 'Container'
+        targetPath: '$(Pipeline.Workspace)/build'
+        artifact: 'build'
+        publishLocation: 'pipeline'
       
   - deployment: DeployPackageinDev
     environment: Check
@@ -29,7 +29,7 @@ stages:
            azureSubscription: 'azuredevopsar'
            appType: 'webApp'
            WebAppName: 'ReactAppDev'
-           packageForLinux: '$(System.DefaultWorkingDirectory)/build'
+           packageForLinux: '$(Pipeline.Workspace)/build'
 
 - stage: QA
 
@@ -40,13 +40,18 @@ stages:
      runOnce:
       deploy:
          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+             buildType: 'current'
+             targetPath: '$(Pipeline.Workspace)'
+
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'azuredevopsar'
               appType: 'webApp'
               WebAppName: 'ReactAppDev'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/build'
+              packageForLinux: '$(Pipeline.Workspace)/build'
        
 
   -  job: DeployPackageinQA
