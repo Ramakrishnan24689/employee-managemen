@@ -29,3 +29,14 @@ stages:
           WebAppName: 'ReactAppDev'
           packageForLinux: '$(System.DefaultWorkingDirectory)/build'
 
+- stage: QA
+  jobs:
+  -  job: DeployPackageinQA
+     steps:
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'azuredevopsar'
+          appType: 'webApp'
+          WebAppName: 'ReactAppDev'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/build'
