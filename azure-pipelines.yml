@@ -1,4 +1,31 @@
 stages:
 - stage: Build
   jobs:
-  - job: Build
+  - job: BuildPackage
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '10.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+        npm run build
+      displayName: 'npm install and build'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)'
+        ArtifactName: 'build'
+        publishLocation: 'Container'
+      
+  - job: DeployPackageinDev
+    steps:
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'azuredevopsar'
+          appType: 'webApp'
+          WebAppName: 'ReactAppDev'
+          packageForLinux: '$(System.DefaultWorkingDirectory)/build'
+
