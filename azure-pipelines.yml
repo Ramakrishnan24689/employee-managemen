@@ -63,4 +63,4 @@ stages:
           azureSubscription: 'azuredevopsar'
           appType: 'webApp'
           WebAppName: 'ReactAppDev'
-          packageForLinux: '$(System.DefaultWorkingDirectory)/build'
+          packageForLinux: '$(Pipeline.Workspace)/build'
