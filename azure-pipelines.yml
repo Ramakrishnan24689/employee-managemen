@@ -28,12 +28,6 @@ steps:
 #    artifact: 'drop'
 #    publishLocation: 'pipeline'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)'
-    ArtifactName: 'build'
-    publishLocation: 'Container'
-
 
 
 
