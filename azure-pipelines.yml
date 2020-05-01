@@ -22,16 +22,25 @@ steps:
     npm run build
   displayName: 'npm install and build'
 
-- task: PublishBuildArtifacts@1
+- task: PublishPipelineArtifact@1
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)'
-    ArtifactName: 'build'
-    publishLocation: 'Container'
+    targetPath: '$(Pipeline.Workspace)'
+    artifact: 'build'
+    publishLocation: 'pipeline'
 
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'azuredevopsar'
-    appType: 'webApp'
-    WebAppName: 'ReactAppDev'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/build'
+#- task: PublishBuildArtifacts@1
+#  inputs:
+#    PathtoPublish: '$(System.DefaultWorkingDirectory)'
+#    ArtifactName: 'build'
+#    publishLocation: 'Container'
+
+
+
+
+#- task: AzureRmWebAppDeployment@4
+#  inputs:
+#    ConnectionType: 'AzureRM'
+#    azureSubscription: 'azuredevopsar'
+#    appType: 'webApp'
+#    WebAppName: 'ReactAppDev'
+#    packageForLinux: '$(System.DefaultWorkingDirectory)/build'
