@@ -25,7 +25,7 @@ steps:
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(System.DefaultWorkingDirectory)'
-    artifact: 'build'
+    artifact: 'drop'
     publishLocation: 'pipeline'
 
 #- task: PublishBuildArtifacts@1
